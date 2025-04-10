@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -8,7 +9,8 @@ Route::get('/', function () {
 });
 
 Route::get('/test', [ProductController::class, 'test']);
-
+Route::get('/attendances', [AttendanceController::class, 'index'])->name('attendances.index');
+Route::get('/attendances/create', [AttendanceController::class, 'create'])->name('attendances.create');
 Route::prefix('v1')->group(function () {
     Route::prefix('products')->controller(ProductController::class)->group(function () {
         Route::get('/', 'index');           // GET /api/v1/products
