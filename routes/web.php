@@ -1,13 +1,9 @@
 <?php
 
-use App\Http\Controllers\LocationController;
-use App\Http\Controllers\LocationDivisionController;
-use App\Http\Controllers\LocationTypeController;
-
-use App\Http\Controllers\EmployeeContractController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FundController;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Middleware\AuthMiddleware;
 
@@ -22,7 +18,7 @@ Route::get('/location-division/{id}/edit', [LocationDivisionController::class, '
 Route::put('/location-division/{id}', [LocationDivisionController::class, 'update'])->name('location-division.update');
 Route::delete('/location-division/{id}', [LocationDivisionController::class, 'destroy'])->name('location-division.destroy');
 
-Route::get('/test', [ProductController::class, 'test']);
+Route::resource('funds', FundController::class);
 
 Route::prefix('v1')->group(function () {
     Route::prefix('products')->controller(ProductController::class)->group(function () {
