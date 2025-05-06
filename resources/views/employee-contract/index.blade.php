@@ -45,6 +45,11 @@
 
     {{-- heading --}}
     <h2 class="text-3xl font-bold dark:text-white my-6">Employee Contract</h2>
+    @if (session('success'))
+    <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg">
+        {{ session('success') }}
+    </div>
+    @endif
 
     {{-- table header --}}
     <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
@@ -89,16 +94,13 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            id
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            employee id
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            employee Name
+                            ID
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Contract Number
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            employee Name
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Start Date
@@ -110,7 +112,7 @@
                             Position
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Location ID
+                            Location
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Working Hours
@@ -130,111 +132,51 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($contracts as $contract)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <td class="px-6 py-4">1</td>
-                        <td class="px-6 py-4">EMP001</td>
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Ahmad Ramadhan
-                        </td>
-                        <td class="px-6 py-4">CTR-001</td>
-                        <td class="px-6 py-4">2024-01-01</td>
-                        <td class="px-6 py-4">2024-12-31</td>
-                        <td class="px-6 py-4">Software Engineer</td>
-                        <td class="px-6 py-4">LOC-01</td>
-                        <td class="px-6 py-4">08:00 - 17:00</td>
-                        <td class="px-6 py-4">Rp 8.000.000</td>
-                        <td class="px-6 py-4">Active</td>
-                        <td class="px-6 py-4">contract_001.pdf</td>
+                        <td class="px-6 py-4">{{ $contract->id }}</td>
+                        <td class="px-6 py-4">{{ $contract->contract_number }}</td>
+                        <td class="px-6 py-4">{{ $contract->employee->name }}</td>
+                        <td class="px-6 py-4">{{ $contract->start_date }}</td>
+                        <td class="px-6 py-4">{{ $contract->end_date }}</td>
+                        <td class="px-6 py-4">{{ $contract->position }}</td>
+                        <td class="px-6 py-4">{{ $contract->location->location }}</td>
+                        <td class="px-6 py-4">{{ $contract->working_hours }}</td>
+                        <td class="px-6 py-4">{{ $contract->salary }}</td>
+                        <td class="px-6 py-4">{{ $contract->status }}</td>
                         <td class="px-6 py-4">
-                            <a href="{{ url('employee-contract/edit') }}"
-                                class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Edit</a>
-                            <button type="button"
-                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                            @if ($contract->contract_file)
+                            <a href="{{ asset('storage/' . $contract->contract_file) }}" target="_blank"
+                                class="text-blue-500 underline">Lihat File</a>
+                            @else
+                            Tidak ada file
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 flex">
+                            <a href="{{ url('/employee-contract/' . $contract->id . '/edit') }}"
+                                class="text-blue-600 hover:text-blue-800">
+                                {{-- Icon edit --}}
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.5 19.5H3v-4.5L16.862 3.487z" />
+                                </svg>
+                            </a>
+                            <form action="{{ url('/employee-contract/' . $contract->id) }}" method="POST"
+                                onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-800">
+                                    {{-- Icon trash --}}
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </form>
                         </td>
                     </tr>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <td class="px-6 py-4">2</td>
-                        <td class="px-6 py-4">EMP002</td>
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Siti Nurhaliza
-                        </td>
-                        <td class="px-6 py-4">CTR-002</td>
-                        <td class="px-6 py-4">2024-03-15</td>
-                        <td class="px-6 py-4">2025-03-14</td>
-                        <td class="px-6 py-4">UI/UX Designer</td>
-                        <td class="px-6 py-4">LOC-02</td>
-                        <td class="px-6 py-4">09:00 - 18:00</td>
-                        <td class="px-6 py-4">Rp 7.500.000</td>
-                        <td class="px-6 py-4">Active</td>
-                        <td class="px-6 py-4">contract_002.pdf</td>
-                        <td class="px-6 py-4">
-                            <a href="{{ url('employee-contract/edit') }}"
-                                class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Edit</a>
-                            <button type="button"
-                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-                        </td>
-                    </tr>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <td class="px-6 py-4">3</td>
-                        <td class="px-6 py-4">EMP003</td>
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Budi Santoso
-                        </td>
-                        <td class="px-6 py-4">CTR-003</td>
-                        <td class="px-6 py-4">2024-06-01</td>
-                        <td class="px-6 py-4">2025-05-31</td>
-                        <td class="px-6 py-4">QA Engineer</td>
-                        <td class="px-6 py-4">LOC-03</td>
-                        <td class="px-6 py-4">08:30 - 17:30</td>
-                        <td class="px-6 py-4">Rp 6.500.000</td>
-                        <td class="px-6 py-4">Active</td>
-                        <td class="px-6 py-4">contract_003.pdf</td>
-                        <td class="px-6 py-4">
-                            <a href="{{ url('employee-contract/edit') }}"
-                                class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Edit</a>
-                            <button type="button"
-                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-                        </td>
-                    </tr>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <td class="px-6 py-4">4</td>
-                        <td class="px-6 py-4">EMP004</td>
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Lestari Dewi
-                        </td>
-                        <td class="px-6 py-4">CTR-004</td>
-                        <td class="px-6 py-4">2023-11-01</td>
-                        <td class="px-6 py-4">2024-10-31</td>
-                        <td class="px-6 py-4">Project Manager</td>
-                        <td class="px-6 py-4">LOC-01</td>
-                        <td class="px-6 py-4">09:00 - 17:00</td>
-                        <td class="px-6 py-4">Rp 10.000.000</td>
-                        <td class="px-6 py-4">Active</td>
-                        <td class="px-6 py-4">contract_004.pdf</td>
-                        <td class="px-6 py-4">
-                            <a href="{{ url('employee-contract/edit') }}"
-                                class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Edit</a>
-                            <button type="button"
-                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-                        </td>
-                    </tr>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                        <td class="px-6 py-4">5</td>
-                        <td class="px-6 py-4">EMP005</td>
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Rizky Maulana
-                        </td>
-                        <td class="px-6 py-4">CTR-005</td>
-                        <td class="px-6 py-4">2024-02-10</td>
-                        <td class="px-6 py-4">2025-02-09</td>
-                        <td class="px-6 py-4">Backend Developer</td>
-                        <td class="px-6 py-4">LOC-02</td>
-                        <td class="px-6 py-4">08:00 - 17:00</td>
-                        <td class="px-6 py-4">Rp 8.200.000</td>
-                        <td class="px-6 py-4">Active</td>
-                        <td class="px-6 py-4">contract_005.pdf</td>
-                        <td class="px-6 py-4">
-                            <a href="{{ url('employee-contract/edit') }}"
-                                class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Edit</a>
-                            <button type="button"
-                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

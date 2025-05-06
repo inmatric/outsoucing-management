@@ -59,7 +59,8 @@
 
     {{-- forms --}}
     <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg p-6 mx-auto w-full">
-        <form class="max-w-3xl mx-auto">
+        <form id="contractForm" class="max-w-3xl mx-auto" action="{{ route('employee-contract.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
             {{-- heading --}}
             <h3 class="text-2xl font-semibold dark:text-white my-6 mx-auto justify-center flex">Create Employee Contract
                 Data</h3>
@@ -78,44 +79,41 @@
                 </div>
             </div>
             <div class="flex flex-col gap-6 mb-6 md:flex-row">
-                <div class="md:w-2/8">
-                    <label for="employee-id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Employee ID</label>
-                    <input type="text" id="employee-id"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        required />
-                </div>
-                <div class="md:w-6/8">
-                    <label for="employee-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Employee Name
+                <div class="w-full">
+                    <label for="employee_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Employee
                     </label>
-                    <input type="text" id="employee-name"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        required />
+                    <select id="employee_id" name="employee_id"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600">
+                        <option selected disabled>Pilih Karyawan</option>
+                        @foreach ($employees as $employee)
+                            <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="mb-5">
-                <label for="contract-number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label for="contract_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Contract Number
                 </label>
-                <input type="text" id="contract-number"
+                <input type="text" id="contract_number" name="contract_number"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required />
             </div>
             <div class="flex flex-col gap-6 mb-6 md:flex-row">
                 <div class="md:w-1/2">
-                    <label for="start-date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label for="start_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         Start Date
                     </label>
-                    <input type="date" id="start-date"
+                    <input type="date" id="start_date" name="start_date"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         required />
                 </div>
                 <div class="md:w-1/2">
-                    <label for="end-date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label for="end_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         End Date
                     </label>
-                    <input type="date" id="end-date"
+                    <input type="date" id="end_date" name="end_date"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         required />
                 </div>
@@ -124,82 +122,60 @@
                 <label for="position" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select
                     your
                     Position</label>
-                <select id="position"
+                <select id="position" name="position"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option selected disabled hidden>Position</option>
-                    <option>Cleaning Service</option>
-                    <option>Security</option>
+                    <option value="Cleaning Service">Cleaning Service</option>
+                    <option value="Security">Security</option>
                 </select>
             </div>
             <div class="mb-5">
-                <label for="location-id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Location ID
+                <label for="location_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Location
                 </label>
-                <input type="text" id="location-id"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required />
+                <select id="location_id" name="location_id"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600">
+                    <option selected disabled>Pilih Lokasi</option>
+                    @foreach ($locations as $location)
+                        <option value="{{ $location->id }}">{{ $location->location }}</option>
+                    @endforeach
+                </select>
+
             </div>
             <div class="mb-5">
-                <div class="flex flex-col gap-6 mb-6 md:flex-row">
-                    <div class="md:w-1/2">
-                        <label for="start-time"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Start
-                            working:</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd"
-                                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <input type="time" id="start-time"
-                                class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                min="09:00" max="18:00" value="00:00" required />
-                        </div>
-                    </div>
-                    <div class="md:w-1/2">
-                        <label for="end-time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">End
-                            working:</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
-                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd"
-                                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <input type="time" id="end-time"
-                                class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                min="09:00" max="18:00" value="00:00" required />
-                        </div>
-                    </div>
-                </div>
+                <label for="working_hours" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select
+                    Working Hours</label>
+                <select id="working_hours" name="working_hours"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option selected disabled hidden>Working Hours</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="shift-based">Shift-based</option>
+                </select>
+            </div>
                 <div class="mb-5">
                     <label for="salary" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         Salary
                     </label>
-                    <input type="text" id="salary"
+                    <input type="text" id="salary" name="salary"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         required value="Rp. " />
                 </div>
                 <div class="mb-5">
-                    <label for="status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label for="status-active" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         Status
                     </label>
                     <div class="flex">
                         <div class="flex items-center me-4">
-                            <input id="inline-radio" type="radio" value="" name="inline-radio-group"
+                            <input id="status-active" type="radio" value="active" name="status"
                                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="inline-radio"
+                            <label for="status-active"
                                 class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Active</label>
                         </div>
                         <div class="flex items-center me-4">
-                            <input id="inline-2-radio" type="radio" value="" name="inline-radio-group"
+                            <input id="status-expired" type="radio" value="expired" name="status"
                                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="inline-2-radio"
+                            <label for="status-expired"
                                 class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Expired</label>
                         </div>
                     </div>
@@ -207,12 +183,12 @@
 
                 </div>
                 <div class="mb-5">
-                    <label for="contact-file" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <label for="contract_file" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         Contact File
                     </label>
                     <input
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        aria-describedby="user_avatar_help" id="user_avatar" type="file">
+                        aria-describedby="user_avatar_help" id="contract_file" name="contract_file" type="file">
                 </div>
                 <div class="flex justify-end">
                     <button type="submit"

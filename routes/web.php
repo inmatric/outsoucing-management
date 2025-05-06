@@ -67,10 +67,12 @@ Route::middleware([AuthMiddleware::class])->group(function () {
 });
 
 Route::prefix('employee-contract')->controller(EmployeeContractController::class)->group(function () {
-    Route::get('/', 'index');
-    Route::get('/create', 'create');
-    Route::post('/', 'store');
-    Route::get('/edit', 'edit');
-    Route::put('/{id}', 'update');
-    Route::delete('/{id}', 'destroy');
+    Route::get('/', 'index')->name('employee-contract.index');
+    Route::get('/create', 'create')->name('employee-contract.create');
+    Route::post('/', 'store')->name('employee-contract.store');
+    Route::get('/{employeeContract}/edit', 'edit')->name('employee-contract.edit');
+    Route::put('/{employeeContract}', 'update')->name('employee-contract.update');
+    Route::delete('/{employeeContract}', 'destroy')->name('employee-contract.destroy');
+    Route::get('/{employeeContract}', 'show')->name('employee-contract.show');
 });
+
