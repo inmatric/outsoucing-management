@@ -9,11 +9,14 @@ class EmployeeEvaluation extends Model
 {
     /** @use HasFactory<\Database\Factories\EmployeeEvaluationFactory> */
     use HasFactory;
-    protected $table ='employeeevaluation';
+    protected $table ='employee_evaluations';
     protected $fillable = [
-        'id_employee',
+        'employee_name',
         'evaluation_date',
         'information',
+        // "id_attendance",
+        // "id_work",
+        
     ];
     
 }

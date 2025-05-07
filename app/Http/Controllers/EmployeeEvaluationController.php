@@ -12,8 +12,8 @@ class EmployeeEvaluationController extends Controller
      */
     public function index()
     {
-        $employeeevaluations = EmployeeEvaluation::all();
-        return view ('employeeevaluation.index', compact('employeeevaluations'));
+        $employeeevaluation = EmployeeEvaluation::all();
+        return view ('employeeevaluation.index', compact('employeeevaluation'));
     }
 
     /**
@@ -30,14 +30,15 @@ class EmployeeEvaluationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_employee' => 'required',
+            // 'employee_name' => 'required',
             'evaluation_date' => 'required|date',
-            'performance_score' => 'required|numeric|min:0|max:100',
             'information' => 'required',
+            // 'id_attendance' => 'required|exists:attendances,id',
+            // 'id_work' => 'required|exists:works,id',
         ]);
         EmployeeEvaluation::create($request->all());
 
-        return redirect()->route('employeeevaluations.index')->with('success', 'Evaluasi berhasil ditambahkan.');
+        return redirect()->route('employeeevaluation.index')->with('success', 'Evaluasi berhasil ditambahkan.');
     }
     
 
@@ -53,10 +54,10 @@ class EmployeeEvaluationController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(EmployeeEvaluation $employeeEvaluation)
-    {
-        $employeeEvaluation = EmployeeEvaluation::findOrFail($employeeEvaluation);
-        return view('employeeevaluation.edit', compact('employeeEvaluation'));
-    }
+{
+    return view('employeeevaluation.edit', compact('employeeEvaluation'));
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -64,24 +65,45 @@ class EmployeeEvaluationController extends Controller
     public function update(Request $request, EmployeeEvaluation $employeeEvaluation)
     {
         $request->validate([
-            'id_employee' => 'required',
+            // 'id_employee' => 'required',
             'evaluation_date' => 'required|date',
-            'performance_score' => 'required|numeric|min:0|max:100',
             'information' => 'required',
         ]);
 
         $employeeEvaluation->update($request->all());
 
-        return redirect()->route('evaluations.index')->with('success', 'Evaluasi berhasil diupdate.');
+        return redirect()->route('employeeevaluation.index')->with('success', 'Evaluasi berhasil diupdate.');
+
     }
     
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(EmployeeEvaluation $employeeEvaluation)
+    public function destroy($id)
     {
+        $employeeEvaluation = EmployeeEvaluation::findOrFail($id);
         $employeeEvaluation->delete();
 
-        return redirect()->route('evaluations.index')->with('success', 'Evaluasi berhasil dihapus.');
+        return redirect()->route('employeeevaluation.index')->with('success', 'Data kerja berhasil dihapus');
+
     }
+    
+    public function search(Request $request)
+{
+    $search = $request->search;
+
+    if (!empty($search)) {
+    $employeeevaluation = EmployeeEvaluation::where('employee_name', 'like', "%{$search}%")
+        ->orWhere('evaluation_date', 'like', "%{$search}%")
+        ->orWhere('information', 'like', "%{$search}%")
+        ->latest()
+        ->get();
+    } else {
+        // Kalau search kosong, ambil semua data
+        $employeeevaluation = EmployeeEvaluation::latest()->get();
+    }
+
+    return view('employeeevaluation.index', compact('employeeevaluation'));
+}
+
     }

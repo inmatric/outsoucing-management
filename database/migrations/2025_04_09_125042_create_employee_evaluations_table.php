@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('employee_evaluations', function (Blueprint $table) {
             $table->id();
+            // $table->unsignedBigInteger('id_attendance');
+            // $table->unsignedBigInteger('id_work');
+            $table->string('employee_name');
+            $table->string('evaluation_date');
+            $table->string('information');
             $table->timestamps();
+            // $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            // $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
+            // $table->foreignId('work_id')->constrained('works')->onDelete('cascade');
         });
     }
 
